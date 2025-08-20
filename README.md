@@ -34,14 +34,22 @@ A basic Kotlin library to be a placeholder for Application exceptions.
 ```
 
 ```shell
-# only Rubens can releases
-./gradlew --info publish
+git commit -m "updated gradle-catalog" -a
+git push
 ```
 
 ```shell
-# only Rubens can releases
+# only Rubens can release
 ./gradlew --info release
 ```
+
+```shell
+git checkout release
+git pull
+./gradlew --info publish
+git checkout main
+```
+
 ## usage
 
 ### ~/.gradle/gradle.properties
