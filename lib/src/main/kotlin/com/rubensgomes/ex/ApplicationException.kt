@@ -1,64 +1,69 @@
+/*
+ * Copyright 2025 Rubens Gomes
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.rubensgomes.ex
 
-import com.rubensgomes.reqresp.BaseResponse.Status
-import jakarta.validation.constraints.Max
-import jakarta.validation.constraints.Min
-import jakarta.validation.constraints.NotBlank
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import com.rubensgomes.reqresp.dto.Error
+import com.rubensgomes.reqresp.dto.Status
+import org.springframework.http.HttpStatus
 
 /**
- * A base aaplication exception type that contains extra attributes, such as an error HTTP status
- * code, [Status] code to faciliate generating complete error HTTP responses; that is, using
- * appropriate HTTP status code and [Status].
+ * Base application exception class for handling HTTP-related errors with structured error
+ * information.
  *
+ * This exception class provides a standardized way to represent errors that occur within the
+ * application, including HTTP status codes, structured error details, and status information. It
+ * extends the standard [Exception] class while adding validation constraints to ensure proper error
+ * handling.
+ *
+ * @param httpStatus The HTTP status code associated with this exception. Must be between 400 and
+ *   599 (inclusive) to represent client and server error status codes according to HTTP
+ *   specifications.
+ * @param status The status information providing additional context about the error state. Cannot
+ *   be Status.SUCCESS since this is an exception class for error conditions only.
+ * @param error The structured error details containing specific information about what went wrong.
+ * @param message A human-readable description of the exception. This value cannot be blank and will
+ *   be used as the exception message.
+ * @param cause The underlying cause of this exception, or null if there is no underlying cause.
+ *   This can be used to chain exceptions and preserve the original error context.
+ * @throws IllegalArgumentException if httpStatus is not within the valid range (400-599)
+ * @throws IllegalArgumentException if message is blank or empty
+ * @throws IllegalArgumentException if status is Status.SUCCESS
+ * @see Exception
+ * @see Status
+ * @see Error
  * @author Rubens Gomes
  */
 open class ApplicationException(
-    @field:Min(
-        400,
-        message = "The value of an error HttpStatus must be greater than 400",
-    )
-    @field:Max(
-        599,
-        message = "The value of an error HttpStatus must be less than 599",
-    )
-    val httpStatus: Int,
+    val httpStatus: HttpStatus,
     val status: Status,
-    @field:NotBlank(message = "The value of exception message must not be blank")
+    val error: Error,
     override val message: String,
-    private val nativeErrorMessage: String?,
     cause: Throwable?,
 ) : Exception(message, cause) {
-    init {
-        if (status == Status.SUCCESS) {
-            log.error("{} is not valid for an exception", status.name)
-            throw IllegalArgumentException("status must NOT be SUCCESS")
-        }
+
+  init {
+    require(httpStatus.isError) { "HTTP status must be an error status, got: $httpStatus" }
+    require(message.isNotBlank()) { "Exception message must not be blank" }
+    require(status != Status.SUCCESS) { "Exception status cannot be SUCCESS, got: $status" }
+
+    // attempt to set error.nativeErrorText if it is blank.
+    if (error.nativeErrorText.isNullOrBlank() && cause != null) {
+      val rootCauseMessage = generateSequence(cause) { it.cause }.last().message
+      // Assuming Error has a way to set nativeErrorText
+      error.nativeErrorText = rootCauseMessage ?: "Unknown root cause error"
     }
-
-    constructor(
-        httpStatus: Int,
-        status: Status,
-        message: String,
-    ) : this(httpStatus, status, message, null, null)
-
-    constructor(
-        httpStatus: Int,
-        status: Status,
-        message: String,
-        nativeMessage: String?,
-    ) : this(httpStatus, status, message, nativeMessage, null)
-
-    override fun toString(): String =
-        "ApplicationException(" +
-            "httpStatus=$httpStatus, " +
-            "status=$status, " +
-            "message='$message', " +
-            "nativeErrorMessage=$nativeErrorMessage" +
-            ")"
-
-    internal companion object {
-        private val log: Logger = LoggerFactory.getLogger(ApplicationException::class.java)
-    }
+  }
 }
