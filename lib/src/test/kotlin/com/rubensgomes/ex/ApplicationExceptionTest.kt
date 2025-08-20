@@ -31,7 +31,7 @@ import org.springframework.http.HttpStatus
  */
 class ApplicationExceptionTest {
 
-    private val logger = LoggerFactory.getLogger(ApplicationExceptionTest::class.java)
+  private val logger = LoggerFactory.getLogger(ApplicationExceptionTest::class.java)
 
   // Mock implementation of Error interface for testing
   private class TestError(
@@ -65,8 +65,12 @@ class ApplicationExceptionTest {
     val error = TestError("Test error")
     val message = "Test exception message"
     val cause = RuntimeException("Root cause")
-    logger.debug("Test inputs: httpStatus={}, status={}, message='{}', cause='{}'",
-                 httpStatus, status, message, cause.message)
+    logger.debug(
+        "Test inputs: httpStatus={}, status={}, message='{}', cause='{}'",
+        httpStatus,
+        status,
+        message,
+        cause.message)
 
     // When
     logger.debug("Creating ApplicationException instance")
@@ -90,8 +94,11 @@ class ApplicationExceptionTest {
     val status = Status.ERROR
     val error = TestError()
     val message = "Test message"
-    logger.debug("Test inputs: httpStatus={} (non-error status), status={}, message='{}'",
-                 httpStatus, status, message)
+    logger.debug(
+        "Test inputs: httpStatus={} (non-error status), status={}, message='{}'",
+        httpStatus,
+        status,
+        message)
 
     // When & Then
     logger.debug("Expecting IllegalArgumentException to be thrown")
@@ -100,7 +107,8 @@ class ApplicationExceptionTest {
           ApplicationException(httpStatus, status, error, message, null)
         }
     assertEquals("HTTP status must be an error status, got: $httpStatus", exception.message)
-    logger.info("✓ IllegalArgumentException correctly thrown for non-error HTTP status: {}", httpStatus)
+    logger.info(
+        "✓ IllegalArgumentException correctly thrown for non-error HTTP status: {}", httpStatus)
   }
 
   @Test
@@ -131,8 +139,11 @@ class ApplicationExceptionTest {
     val status = Status.ERROR
     val error = TestError()
     val message = "   "
-    logger.debug("Test inputs: httpStatus={}, status={}, message='{}' (whitespace only)",
-                 httpStatus, status, message)
+    logger.debug(
+        "Test inputs: httpStatus={}, status={}, message='{}' (whitespace only)",
+        httpStatus,
+        status,
+        message)
 
     // When & Then
     logger.debug("Expecting IllegalArgumentException to be thrown for whitespace-only message")
@@ -152,8 +163,11 @@ class ApplicationExceptionTest {
     val status = Status.SUCCESS // Not allowed for exceptions
     val error = TestError()
     val message = "Test message"
-    logger.debug("Test inputs: httpStatus={}, status={} (not allowed for exceptions), message='{}'",
-                 httpStatus, status, message)
+    logger.debug(
+        "Test inputs: httpStatus={}, status={} (not allowed for exceptions), message='{}'",
+        httpStatus,
+        status,
+        message)
 
     // When & Then
     logger.debug("Expecting IllegalArgumentException to be thrown for SUCCESS status")
@@ -203,8 +217,11 @@ class ApplicationExceptionTest {
     val error = TestError("") // blank nativeErrorText
     val message = "Test message"
     val rootCause = RuntimeException("Root cause message")
-    logger.debug("Test inputs: httpStatus={}, error.nativeErrorText='{}' (blank), rootCause.message='{}'",
-                 httpStatus, error.getNativeErrorText(), rootCause.message)
+    logger.debug(
+        "Test inputs: httpStatus={}, error.nativeErrorText='{}' (blank), rootCause.message='{}'",
+        httpStatus,
+        error.getNativeErrorText(),
+        rootCause.message)
 
     // When
     logger.debug("Creating ApplicationException with blank error text and cause")
@@ -214,7 +231,8 @@ class ApplicationExceptionTest {
     logger.debug("Verifying native error text was set from root cause")
     assertNotNull(exception)
     assertEquals("Root cause message", exception.error.nativeErrorText)
-    logger.info("✓ Native error text correctly set from root cause: '{}'", exception.error.nativeErrorText)
+    logger.info(
+        "✓ Native error text correctly set from root cause: '{}'", exception.error.nativeErrorText)
   }
 
   @Test
@@ -226,8 +244,10 @@ class ApplicationExceptionTest {
     val error = TestError(null) // null nativeErrorText
     val message = "Test message"
     val rootCause = RuntimeException("Root cause message")
-    logger.debug("Test inputs: httpStatus={}, error.nativeErrorText=null, rootCause.message='{}'",
-                 httpStatus, rootCause.message)
+    logger.debug(
+        "Test inputs: httpStatus={}, error.nativeErrorText=null, rootCause.message='{}'",
+        httpStatus,
+        rootCause.message)
 
     // When
     logger.debug("Creating ApplicationException with null error text and cause")
@@ -237,7 +257,8 @@ class ApplicationExceptionTest {
     logger.debug("Verifying native error text was set from root cause")
     assertNotNull(exception)
     assertEquals("Root cause message", exception.error.nativeErrorText)
-    logger.info("✓ Native error text correctly set from root cause: '{}'", exception.error.nativeErrorText)
+    logger.info(
+        "✓ Native error text correctly set from root cause: '{}'", exception.error.nativeErrorText)
   }
 
   @Test
@@ -249,7 +270,8 @@ class ApplicationExceptionTest {
     val error = TestError(null)
     val message = "Test message"
     val cause = RuntimeException(null as String?) // null message
-    logger.debug("Test inputs: httpStatus={}, error.nativeErrorText=null, cause.message=null", httpStatus)
+    logger.debug(
+        "Test inputs: httpStatus={}, error.nativeErrorText=null, cause.message=null", httpStatus)
 
     // When
     logger.debug("Creating ApplicationException with null error text and null cause message")
@@ -272,8 +294,11 @@ class ApplicationExceptionTest {
     val error = TestError(originalErrorText)
     val message = "Test message"
     val cause = RuntimeException("This should not override")
-    logger.debug("Test inputs: httpStatus={}, originalErrorText='{}', cause.message='{}'",
-                 httpStatus, originalErrorText, cause.message)
+    logger.debug(
+        "Test inputs: httpStatus={}, originalErrorText='{}', cause.message='{}'",
+        httpStatus,
+        originalErrorText,
+        cause.message)
 
     // When
     logger.debug("Creating ApplicationException with existing error text and cause")
@@ -319,10 +344,11 @@ class ApplicationExceptionTest {
     val rootCause = RuntimeException("Root cause message")
     val middleCause = IllegalStateException("Middle cause", rootCause)
     val immediateCause = IllegalArgumentException("Immediate cause", middleCause)
-    logger.debug("Created exception chain: {} -> {} -> {}",
-                 immediateCause.javaClass.simpleName,
-                 middleCause.javaClass.simpleName,
-                 rootCause.javaClass.simpleName)
+    logger.debug(
+        "Created exception chain: {} -> {} -> {}",
+        immediateCause.javaClass.simpleName,
+        middleCause.javaClass.simpleName,
+        rootCause.javaClass.simpleName)
     logger.debug("Root cause message: '{}'", rootCause.message)
 
     // When
@@ -334,8 +360,9 @@ class ApplicationExceptionTest {
     assertNotNull(exception)
     assertEquals("Root cause message", exception.error.nativeErrorText)
     assertEquals(immediateCause, exception.cause)
-    logger.info("✓ Root cause message correctly extracted from exception chain: '{}'",
-                exception.error.nativeErrorText)
+    logger.info(
+        "✓ Root cause message correctly extracted from exception chain: '{}'",
+        exception.error.nativeErrorText)
   }
 
   @Test
@@ -347,8 +374,8 @@ class ApplicationExceptionTest {
     val error = TestError()
     val message = "Test message"
     val cause = RuntimeException("Cause")
-    logger.debug("Test inputs: httpStatus={}, message='{}', cause='{}'",
-                 httpStatus, message, cause.message)
+    logger.debug(
+        "Test inputs: httpStatus={}, message='{}', cause='{}'", httpStatus, message, cause.message)
 
     // When
     logger.debug("Creating ApplicationException instance")
@@ -359,8 +386,10 @@ class ApplicationExceptionTest {
     assertNotNull(exception as? Exception)
     assertEquals(message, exception.message)
     assertEquals(cause, exception.cause)
-    logger.info("✓ ApplicationException correctly extends Exception with message: '{}' and cause: '{}'",
-                exception.message, exception.cause?.message)
+    logger.info(
+        "✓ ApplicationException correctly extends Exception with message: '{}' and cause: '{}'",
+        exception.message,
+        exception.cause?.message)
   }
 
   @Test
@@ -371,8 +400,11 @@ class ApplicationExceptionTest {
     val status = Status.ERROR
     val error = TestError()
     val message = "Test message"
-    logger.debug("Test inputs: httpStatus={}, status={}, message='{}', cause=null",
-                 httpStatus, status, message)
+    logger.debug(
+        "Test inputs: httpStatus={}, status={}, message='{}', cause=null",
+        httpStatus,
+        status,
+        message)
 
     // When
     logger.debug("Creating ApplicationException without cause")
@@ -383,6 +415,8 @@ class ApplicationExceptionTest {
     assertNotNull(exception)
     assertEquals(error, exception.error)
     assertNull(exception.cause)
-    logger.info("✓ ApplicationException created successfully without cause, message: '{}'", exception.message)
+    logger.info(
+        "✓ ApplicationException created successfully without cause, message: '{}'",
+        exception.message)
   }
 }
