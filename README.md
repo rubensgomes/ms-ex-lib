@@ -39,7 +39,7 @@ microservices.
 ```
 
 ```shell
-git commit -m "updated gradle-catalog" -a
+git commit -m "updates and fixes" -a
 git push
 ```
 
