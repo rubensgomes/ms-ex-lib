@@ -1,25 +1,10 @@
-/*
- * Copyright 2025 Rubens Gomes
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-package com.rubensgomes.ex.security
+package com.rubensgomes.msexlib.security
 
-import com.rubensgomes.ex.ApplicationException
+import com.rubensgomes.msexlib.ApplicationException
 import com.rubensgomes.reqresp.dto.Error
 import com.rubensgomes.reqresp.dto.ErrorCode
 import com.rubensgomes.reqresp.dto.Status
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.slf4j.LoggerFactory
@@ -80,11 +65,11 @@ class SecurityExceptionTest {
 
     // Then
     logger.debug("Verifying exception properties")
-    assertEquals(httpStatus, exception.httpStatus)
-    assertEquals(status, exception.status)
-    assertEquals(error, exception.error)
-    assertEquals(message, exception.message)
-    assertEquals(cause, exception.cause)
+      Assertions.assertEquals(httpStatus, exception.httpStatus)
+      Assertions.assertEquals(status, exception.status)
+      Assertions.assertEquals(error, exception.error)
+      Assertions.assertEquals(message, exception.message)
+      Assertions.assertEquals(cause, exception.cause)
     logger.info("✓ SecurityException created successfully with valid parameters")
   }
 
@@ -106,9 +91,9 @@ class SecurityExceptionTest {
 
     // Then
     logger.debug("Verifying inheritance and type checking")
-    assertTrue(exception is ApplicationException)
-    assertTrue(exception is SecurityException)
-    assertNotNull(exception as? Exception)
+      Assertions.assertTrue(exception is ApplicationException)
+      Assertions.assertTrue(exception is SecurityException)
+      Assertions.assertNotNull(exception as? Exception)
     logger.info("✓ SecurityException correctly extends ApplicationException")
   }
 
@@ -130,9 +115,12 @@ class SecurityExceptionTest {
     logger.debug("Expecting IllegalArgumentException to be thrown")
     val exception =
         assertThrows<IllegalArgumentException> {
-          SecurityException(httpStatus, status, error, message, null)
+            SecurityException(httpStatus, status, error, message, null)
         }
-    assertEquals("HTTP status must be an error status, got: $httpStatus", exception.message)
+      Assertions.assertEquals(
+          "HTTP status must be an error status, got: $httpStatus",
+          exception.message
+      )
     logger.info(
         "✓ IllegalArgumentException correctly thrown for non-error HTTP status: {}", httpStatus)
   }
@@ -155,9 +143,12 @@ class SecurityExceptionTest {
     logger.debug("Expecting IllegalArgumentException to be thrown for SUCCESS status")
     val exception =
         assertThrows<IllegalArgumentException> {
-          SecurityException(httpStatus, status, error, message, null)
+            SecurityException(httpStatus, status, error, message, null)
         }
-    assertEquals("Exception status cannot be SUCCESS, got: $status", exception.message)
+      Assertions.assertEquals(
+          "Exception status cannot be SUCCESS, got: $status",
+          exception.message
+      )
     logger.info("✓ IllegalArgumentException correctly thrown for SUCCESS status")
   }
 
@@ -185,7 +176,7 @@ class SecurityExceptionTest {
 
       // When & Then (should not throw)
       val exception = SecurityException(httpStatus, status, error, message, null)
-      assertEquals(httpStatus, exception.httpStatus)
+        Assertions.assertEquals(httpStatus, exception.httpStatus)
       logger.trace("✓ Successfully created SecurityException with httpStatus: {}", httpStatus)
     }
     logger.info(
@@ -213,8 +204,8 @@ class SecurityExceptionTest {
 
     // Then
     logger.debug("Verifying native error text was set from security cause")
-    assertNotNull(exception)
-    assertEquals("JWT token has expired", exception.error.nativeErrorText)
+      Assertions.assertNotNull(exception)
+      Assertions.assertEquals("JWT token has expired", exception.error.nativeErrorText)
     logger.info(
         "✓ Native error text correctly set from security cause: '{}'",
         exception.error.nativeErrorText)
@@ -242,7 +233,7 @@ class SecurityExceptionTest {
 
     // Then
     logger.debug("Verifying original security error text was preserved")
-    assertEquals(originalSecurityError, exception.error.nativeErrorText)
+      Assertions.assertEquals(originalSecurityError, exception.error.nativeErrorText)
     logger.info("✓ Original security error text preserved: '{}'", exception.error.nativeErrorText)
   }
 
@@ -272,9 +263,9 @@ class SecurityExceptionTest {
 
     // Then
     logger.debug("Verifying root cause message was extracted from security chain")
-    assertNotNull(exception)
-    assertEquals("TOTP verification failed", exception.error.nativeErrorText)
-    assertEquals(validationCause, exception.cause)
+      Assertions.assertNotNull(exception)
+      Assertions.assertEquals("TOTP verification failed", exception.error.nativeErrorText)
+      Assertions.assertEquals(validationCause, exception.cause)
     logger.info(
         "✓ Root cause message correctly extracted from security exception chain: '{}'",
         exception.error.nativeErrorText)
@@ -300,10 +291,10 @@ class SecurityExceptionTest {
 
     // Then
     logger.debug("Verifying security exception created successfully without cause")
-    assertNotNull(exception)
-    assertEquals(error, exception.error)
-    assertNull(exception.cause)
-    assertEquals(message, exception.message)
+      Assertions.assertNotNull(exception)
+      Assertions.assertEquals(error, exception.error)
+      Assertions.assertNull(exception.cause)
+      Assertions.assertEquals(message, exception.message)
     logger.info(
         "✓ SecurityException created successfully without cause, message: '{}'", exception.message)
   }
@@ -329,14 +320,14 @@ class SecurityExceptionTest {
 
     // Then
     logger.debug("Verifying security context is maintained")
-    assertEquals(httpStatus, exception.httpStatus)
-    assertEquals(status, exception.status)
-    assertEquals(error, exception.error)
-    assertEquals(securityMessage, exception.message)
-    assertEquals(securityCause, exception.cause)
+      Assertions.assertEquals(httpStatus, exception.httpStatus)
+      Assertions.assertEquals(status, exception.status)
+      Assertions.assertEquals(error, exception.error)
+      Assertions.assertEquals(securityMessage, exception.message)
+      Assertions.assertEquals(securityCause, exception.cause)
 
     // Verify it's still a security exception type
-    assertTrue(exception is SecurityException)
+      Assertions.assertTrue(exception is SecurityException)
     logger.info(
         "✓ SecurityException maintains all security context: status={}, message='{}'",
         exception.httpStatus,
@@ -364,8 +355,8 @@ class SecurityExceptionTest {
 
       // When & Then (should not throw)
       val exception = SecurityException(httpStatus, status, error, message, authCause)
-      assertEquals(httpStatus, exception.httpStatus)
-      assertEquals(message, exception.message)
+        Assertions.assertEquals(httpStatus, exception.httpStatus)
+        Assertions.assertEquals(message, exception.message)
       logger.trace("✓ Successfully handled authentication scenario: {}", httpStatus)
     }
     logger.info(
@@ -392,8 +383,8 @@ class SecurityExceptionTest {
 
       // When & Then (should not throw)
       val exception = SecurityException(httpStatus, status, error, message, authzCause)
-      assertEquals(httpStatus, exception.httpStatus)
-      assertEquals(message, exception.message)
+        Assertions.assertEquals(httpStatus, exception.httpStatus)
+        Assertions.assertEquals(message, exception.message)
       logger.trace("✓ Successfully handled authorization scenario: {}", httpStatus)
     }
     logger.info(

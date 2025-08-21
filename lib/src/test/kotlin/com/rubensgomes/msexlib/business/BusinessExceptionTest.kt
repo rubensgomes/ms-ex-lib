@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.rubensgomes.ex.business
+package com.rubensgomes.msexlib.business
 
-import com.rubensgomes.ex.ApplicationException
+import com.rubensgomes.msexlib.ApplicationException
 import com.rubensgomes.reqresp.dto.Error
 import com.rubensgomes.reqresp.dto.ErrorCode
 import com.rubensgomes.reqresp.dto.Status
