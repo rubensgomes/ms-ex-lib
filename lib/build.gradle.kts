@@ -86,7 +86,7 @@ dependencies {
     // org.slf4j:slf4j-api
     implementation(libs.slf4j.api)
     // com.rubensgomes:reqresp-lib
-    implementation(libs.reqresp.lib)
+    implementation(libs.ms.reqresp.lib)
 
     // ########## testImplementation ##########################################
     // Logback bundle:

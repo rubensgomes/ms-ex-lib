@@ -16,8 +16,8 @@
 package com.rubensgomes.msexlib.system
 
 import com.rubensgomes.msexlib.ApplicationException
-import com.rubensgomes.reqresp.dto.Error
-import com.rubensgomes.reqresp.dto.Status
+import com.rubensgomes.msreqresplib.dto.Error
+import com.rubensgomes.msreqresplib.dto.Status
 import org.springframework.http.HttpStatus
 
 /**

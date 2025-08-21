@@ -15,9 +15,9 @@
  */
 package com.rubensgomes.msexlib
 
-import com.rubensgomes.reqresp.dto.Error
-import com.rubensgomes.reqresp.dto.ErrorCode
-import com.rubensgomes.reqresp.dto.Status
+import com.rubensgomes.msreqresplib.dto.Error
+import com.rubensgomes.msreqresplib.dto.ErrorCode
+import com.rubensgomes.msreqresplib.dto.Status
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
