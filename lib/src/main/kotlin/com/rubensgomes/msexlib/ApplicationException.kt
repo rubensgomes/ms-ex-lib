@@ -15,8 +15,8 @@
  */
 package com.rubensgomes.msexlib
 
-import com.rubensgomes.msreqresplib.dto.Error
-import com.rubensgomes.msreqresplib.dto.Status
+import com.rubensgomes.msreqresplib.Status
+import com.rubensgomes.msreqresplib.error.Error
 import org.springframework.http.HttpStatus
 
 /**

@@ -47,7 +47,7 @@ dependencyResolutionManagement {
             // plugins and dependencies used in a Gradle build file.
             // NOTE: You should replace with our own Gradle Version catalog. Rubens may
             // deactivate this Gradle version catalog at anytime without notice.
-            from("com.rubensgomes:gradle-catalog:0.0.1")
+            from("com.rubensgomes:gradle-catalog:0.0.3")
         }
     }
 }

@@ -16,9 +16,9 @@
 package com.rubensgomes.msexlib.system
 
 import com.rubensgomes.msexlib.ApplicationException
-import com.rubensgomes.msreqresplib.dto.Error
-import com.rubensgomes.msreqresplib.dto.ErrorCode
-import com.rubensgomes.msreqresplib.dto.Status
+import com.rubensgomes.msreqresplib.Status
+import com.rubensgomes.msreqresplib.error.Error
+import com.rubensgomes.msreqresplib.error.ErrorCode
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -213,10 +213,11 @@ class SystemExceptionTest {
     // Then
     logger.debug("Verifying native error text was set from system cause")
     Assertions.assertNotNull(exception)
-    Assertions.assertEquals("Connection pool maximum size reached", exception.error.nativeErrorText)
+    Assertions.assertEquals(
+        "Connection pool maximum size reached", exception.error.getNativeErrorText())
     logger.info(
         "✓ Native error text correctly set from system cause: '{}'",
-        exception.error.nativeErrorText)
+        exception.error.getNativeErrorText())
   }
 
   @Test
@@ -241,8 +242,9 @@ class SystemExceptionTest {
 
     // Then
     logger.debug("Verifying original system error text was preserved")
-    Assertions.assertEquals(originalSystemError, exception.error.nativeErrorText)
-    logger.info("✓ Original system error text preserved: '{}'", exception.error.nativeErrorText)
+    Assertions.assertEquals(originalSystemError, exception.error.getNativeErrorText())
+    logger.info(
+        "✓ Original system error text preserved: '{}'", exception.error.getNativeErrorText())
   }
 
   @Test
@@ -272,11 +274,11 @@ class SystemExceptionTest {
     // Then
     logger.debug("Verifying root cause message was extracted from system chain")
     Assertions.assertNotNull(exception)
-    Assertions.assertEquals("Network interface down", exception.error.nativeErrorText)
+    Assertions.assertEquals("Network interface down", exception.error.getNativeErrorText())
     Assertions.assertEquals(serviceCause, exception.cause)
     logger.info(
         "✓ Root cause message correctly extracted from system exception chain: '{}'",
-        exception.error.nativeErrorText)
+        exception.error.getNativeErrorText())
   }
 
   @Test

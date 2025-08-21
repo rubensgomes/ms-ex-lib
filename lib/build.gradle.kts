@@ -85,7 +85,7 @@ dependencies {
     implementation(libs.jakarta.validation.api)
     // org.slf4j:slf4j-api
     implementation(libs.slf4j.api)
-    // com.rubensgomes:reqresp-lib
+    // com.rubensgomes:ms-reqresp-lib
     implementation(libs.ms.reqresp.lib)
 
     // ########## testImplementation ##########################################

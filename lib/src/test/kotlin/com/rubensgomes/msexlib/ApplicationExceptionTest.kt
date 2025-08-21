@@ -15,10 +15,12 @@
  */
 package com.rubensgomes.msexlib
 
-import com.rubensgomes.msreqresplib.dto.Error
-import com.rubensgomes.msreqresplib.dto.ErrorCode
-import com.rubensgomes.msreqresplib.dto.Status
-import org.junit.jupiter.api.Assertions.*
+import com.rubensgomes.msreqresplib.Status
+import com.rubensgomes.msreqresplib.error.Error
+import com.rubensgomes.msreqresplib.error.ErrorCode
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.slf4j.LoggerFactory
