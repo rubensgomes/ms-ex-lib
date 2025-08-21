@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.rubensgomes.ex.system
+package com.rubensgomes.msexlib.system
 
-import com.rubensgomes.ex.ApplicationException
+import com.rubensgomes.msexlib.ApplicationException
 import com.rubensgomes.reqresp.dto.Error
 import com.rubensgomes.reqresp.dto.Status
 import org.springframework.http.HttpStatus

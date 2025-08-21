@@ -1,5 +1,6 @@
-# ex-lib
-A basic Kotlin library to be a placeholder for Application exceptions.
+# ms-ex-lib
+A Kotlin library to be a placeholder for application exceptions to be used by
+microservices.
 
 ## Display Java Tools Installed
 
@@ -23,6 +24,10 @@ A basic Kotlin library to be a placeholder for Application exceptions.
 
 ```shell
 ./gradlew --info check
+```
+
+```shell
+./gradlew --info test
 ```
 
 ```shell

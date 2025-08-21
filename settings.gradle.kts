@@ -22,7 +22,7 @@
  */
 
 // The project name should match the root folder
-rootProject.name = "ex-lib"
+rootProject.name = "ms-ex-lib"
 // The project type should match "app" or "lib" depending on project nature
 include("lib")
 

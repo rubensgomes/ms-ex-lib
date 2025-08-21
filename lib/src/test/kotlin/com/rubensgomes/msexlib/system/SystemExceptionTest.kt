@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.rubensgomes.ex.system
+package com.rubensgomes.msexlib.system
 
-import com.rubensgomes.ex.ApplicationException
+import com.rubensgomes.msexlib.ApplicationException
 import com.rubensgomes.reqresp.dto.Error
 import com.rubensgomes.reqresp.dto.ErrorCode
 import com.rubensgomes.reqresp.dto.Status
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.slf4j.LoggerFactory
@@ -80,11 +80,11 @@ class SystemExceptionTest {
 
     // Then
     logger.debug("Verifying exception properties")
-    assertEquals(httpStatus, exception.httpStatus)
-    assertEquals(status, exception.status)
-    assertEquals(error, exception.error)
-    assertEquals(message, exception.message)
-    assertEquals(cause, exception.cause)
+    Assertions.assertEquals(httpStatus, exception.httpStatus)
+    Assertions.assertEquals(status, exception.status)
+    Assertions.assertEquals(error, exception.error)
+    Assertions.assertEquals(message, exception.message)
+    Assertions.assertEquals(cause, exception.cause)
     logger.info("✓ SystemException created successfully with valid parameters")
   }
 
@@ -106,9 +106,9 @@ class SystemExceptionTest {
 
     // Then
     logger.debug("Verifying inheritance and type checking")
-    assertTrue(exception is ApplicationException)
-    assertTrue(exception is SystemException)
-    assertNotNull(exception as? Exception)
+    Assertions.assertTrue(exception is ApplicationException)
+    Assertions.assertTrue(exception is SystemException)
+    Assertions.assertNotNull(exception as? Exception)
     logger.info("✓ SystemException correctly extends ApplicationException")
   }
 
@@ -132,7 +132,8 @@ class SystemExceptionTest {
         assertThrows<IllegalArgumentException> {
           SystemException(httpStatus, status, error, message, null)
         }
-    assertEquals("HTTP status must be an error status, got: $httpStatus", exception.message)
+    Assertions.assertEquals(
+        "HTTP status must be an error status, got: $httpStatus", exception.message)
     logger.info(
         "✓ IllegalArgumentException correctly thrown for non-error HTTP status: {}", httpStatus)
   }
@@ -157,7 +158,7 @@ class SystemExceptionTest {
         assertThrows<IllegalArgumentException> {
           SystemException(httpStatus, status, error, message, null)
         }
-    assertEquals("Exception status cannot be SUCCESS, got: $status", exception.message)
+    Assertions.assertEquals("Exception status cannot be SUCCESS, got: $status", exception.message)
     logger.info("✓ IllegalArgumentException correctly thrown for SUCCESS status")
   }
 
@@ -184,7 +185,7 @@ class SystemExceptionTest {
 
       // When & Then (should not throw)
       val exception = SystemException(httpStatus, status, error, message, null)
-      assertEquals(httpStatus, exception.httpStatus)
+      Assertions.assertEquals(httpStatus, exception.httpStatus)
       logger.trace("✓ Successfully created SystemException with httpStatus: {}", httpStatus)
     }
     logger.info("✓ All {} system-related HTTP statuses handled correctly", systemHttpStatuses.size)
@@ -211,8 +212,8 @@ class SystemExceptionTest {
 
     // Then
     logger.debug("Verifying native error text was set from system cause")
-    assertNotNull(exception)
-    assertEquals("Connection pool maximum size reached", exception.error.nativeErrorText)
+    Assertions.assertNotNull(exception)
+    Assertions.assertEquals("Connection pool maximum size reached", exception.error.nativeErrorText)
     logger.info(
         "✓ Native error text correctly set from system cause: '{}'",
         exception.error.nativeErrorText)
@@ -240,7 +241,7 @@ class SystemExceptionTest {
 
     // Then
     logger.debug("Verifying original system error text was preserved")
-    assertEquals(originalSystemError, exception.error.nativeErrorText)
+    Assertions.assertEquals(originalSystemError, exception.error.nativeErrorText)
     logger.info("✓ Original system error text preserved: '{}'", exception.error.nativeErrorText)
   }
 
@@ -270,9 +271,9 @@ class SystemExceptionTest {
 
     // Then
     logger.debug("Verifying root cause message was extracted from system chain")
-    assertNotNull(exception)
-    assertEquals("Network interface down", exception.error.nativeErrorText)
-    assertEquals(serviceCause, exception.cause)
+    Assertions.assertNotNull(exception)
+    Assertions.assertEquals("Network interface down", exception.error.nativeErrorText)
+    Assertions.assertEquals(serviceCause, exception.cause)
     logger.info(
         "✓ Root cause message correctly extracted from system exception chain: '{}'",
         exception.error.nativeErrorText)
@@ -298,10 +299,10 @@ class SystemExceptionTest {
 
     // Then
     logger.debug("Verifying system exception created successfully without cause")
-    assertNotNull(exception)
-    assertEquals(error, exception.error)
-    assertNull(exception.cause)
-    assertEquals(message, exception.message)
+    Assertions.assertNotNull(exception)
+    Assertions.assertEquals(error, exception.error)
+    Assertions.assertNull(exception.cause)
+    Assertions.assertEquals(message, exception.message)
     logger.info(
         "✓ SystemException created successfully without cause, message: '{}'", exception.message)
   }
@@ -327,14 +328,14 @@ class SystemExceptionTest {
 
     // Then
     logger.debug("Verifying system context is maintained")
-    assertEquals(httpStatus, exception.httpStatus)
-    assertEquals(status, exception.status)
-    assertEquals(error, exception.error)
-    assertEquals(systemMessage, exception.message)
-    assertEquals(systemCause, exception.cause)
+    Assertions.assertEquals(httpStatus, exception.httpStatus)
+    Assertions.assertEquals(status, exception.status)
+    Assertions.assertEquals(error, exception.error)
+    Assertions.assertEquals(systemMessage, exception.message)
+    Assertions.assertEquals(systemCause, exception.cause)
 
     // Verify it's still a system exception type
-    assertTrue(exception is SystemException)
+    Assertions.assertTrue(exception is SystemException)
     logger.info(
         "✓ SystemException maintains all system context: status={}, message='{}'",
         exception.httpStatus,
@@ -364,8 +365,8 @@ class SystemExceptionTest {
 
       // When & Then (should not throw)
       val exception = SystemException(httpStatus, status, error, message, infraCause)
-      assertEquals(httpStatus, exception.httpStatus)
-      assertEquals(message, exception.message)
+      Assertions.assertEquals(httpStatus, exception.httpStatus)
+      Assertions.assertEquals(message, exception.message)
       logger.trace("✓ Successfully handled infrastructure scenario: {}", httpStatus)
     }
     logger.info(
@@ -394,8 +395,8 @@ class SystemExceptionTest {
 
       // When & Then (should not throw)
       val exception = SystemException(httpStatus, status, error, message, resourceCause)
-      assertEquals(httpStatus, exception.httpStatus)
-      assertEquals(message, exception.message)
+      Assertions.assertEquals(httpStatus, exception.httpStatus)
+      Assertions.assertEquals(message, exception.message)
       logger.trace("✓ Successfully handled resource management scenario: {}", httpStatus)
     }
     logger.info(
@@ -424,8 +425,8 @@ class SystemExceptionTest {
 
       // When & Then (should not throw)
       val exception = SystemException(httpStatus, status, error, message, configCause)
-      assertEquals(httpStatus, exception.httpStatus)
-      assertEquals(message, exception.message)
+      Assertions.assertEquals(httpStatus, exception.httpStatus)
+      Assertions.assertEquals(message, exception.message)
       logger.trace("✓ Successfully handled configuration error scenario: {}", httpStatus)
     }
     logger.info(
