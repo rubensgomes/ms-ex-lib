@@ -27,6 +27,10 @@ microservices.
 ```
 
 ```shell
+./gradlew --info test
+```
+
+```shell
 ./gradlew --info jar
 ```
 
