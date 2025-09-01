@@ -27,8 +27,6 @@ plugins {
     id("java-library")
     // org.jetbrains.kotlin.jvm
     alias(libs.plugins.kotlin.jvm)
-    // io.freefair.lombok
-    alias(libs.plugins.lombok)
     // net.researchgate.release
     alias(libs.plugins.release)
     // com.diffplug.spotless
