@@ -33,11 +33,9 @@ plugins {
 
 dependencyResolutionManagement {
     repositories {
+        // URLs of Rubens' public GitHub Package Maven repositories.
         maven {
-            // This is the URL of Rubens' public Maven repository.
-            // NOTE: You should replace with your own Maven repository. Rubens may
-            // deactivate this repository at anytime without notice.
-            url = uri("https://repo.repsy.io/mvn/rubensgomes/default/")
+            url = uri("https://maven.pkg.github.com/rubensgomes/gradle-catalog")
         }
     }
 
@@ -47,7 +45,7 @@ dependencyResolutionManagement {
             // plugins and dependencies used in a Gradle build file.
             // NOTE: You should replace with our own Gradle Version catalog. Rubens may
             // deactivate this Gradle version catalog at anytime without notice.
-            from("com.rubensgomes:gradle-catalog:0.0.7")
+            from("com.rubensgomes:gradle-catalog:0.0.10")
         }
     }
 }
