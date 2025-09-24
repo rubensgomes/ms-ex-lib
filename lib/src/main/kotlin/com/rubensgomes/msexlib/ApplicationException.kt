@@ -58,12 +58,5 @@ open class ApplicationException(
     require(httpStatus.isError) { "HTTP status must be an error status, got: $httpStatus" }
     require(message.isNotBlank()) { "Exception message must not be blank" }
     require(status != Status.SUCCESS) { "Exception status cannot be SUCCESS, got: $status" }
-
-    // attempt to set error.nativeErrorText if it is blank.
-    if (error.nativeErrorText.isNullOrBlank() && cause != null) {
-      val rootCauseMessage = generateSequence(cause) { it.cause }.last().message
-      // Assuming Error has a way to set nativeErrorText
-      error.nativeErrorText = rootCauseMessage ?: "Unknown root cause error"
-    }
   }
 }

@@ -14,12 +14,6 @@
  * limitations under the__LICENSE] [1].
  */
 
-/**
- * This is a blueprint Gradle build.gradle.kts file used by Rubens Gomes during the creation of a
- * new Gradle Spring Boot Java development project.
- *
- * @author [Rubens Gomes](https://rubensgomes.com)
- */
 plugins {
     id("idea")
     id("maven-publish")
@@ -27,8 +21,6 @@ plugins {
     id("java-library")
     // org.jetbrains.kotlin.jvm
     alias(libs.plugins.kotlin.jvm)
-    // io.freefair.lombok
-    alias(libs.plugins.lombok)
     // net.researchgate.release
     alias(libs.plugins.release)
     // com.diffplug.spotless
@@ -50,22 +42,10 @@ val developerId: String by project
 val developerName: String by project
 val scmConnection: String by project
 val scmUrl: String by project
-val repsyUrl: String by project
-// REPSY_USERNAME must be defined as an environment variable
-// REPSY_PASSWORD must be defined as an environment variable
-val repsyUsername: String? = System.getenv("REPSY_USERNAME")
-val repsyPassword: String? = System.getenv("REPSY_PASSWORD")
 
 project.group = group
 project.version = version
 project.description = description
-
-// --------------- >>> repositories <<< ---------------------------------------
-
-repositories {
-    mavenCentral()
-    maven { url = uri("https://repo.repsy.io/mvn/rubensgomes/default/") }
-}
 
 // --------------- >>> dependencies <<< ---------------------------------------
 
@@ -164,7 +144,11 @@ tasks.jar {
                 "Built-By" to project.properties["developerId"],
                 "Build-Jdk" to System.getProperty("java.home"),
                 "Created-By" to
-                    "${System.getProperty("java.version")} (${System.getProperty("java.vendor")})",
+                    "${System.getProperty("java.version")} (${
+                        System.getProperty(
+                            "java.vendor",
+                        )
+                    })",
             ),
         )
     }
@@ -229,11 +213,15 @@ publishing {
     }
 
     repositories {
+        val msExLibMavenRepoUrl: String by project
+
         maven {
-            url = uri(repsyUrl)
+            name = "GitHubPackages"
+            project.version = version
+            url = uri(msExLibMavenRepoUrl)
             credentials {
-                username = repsyUsername
-                password = repsyPassword
+                username = System.getenv("MAVEN_REPO_USERNAME")
+                password = System.getenv("MAVEN_REPO_PASSWORD")
             }
         }
     }

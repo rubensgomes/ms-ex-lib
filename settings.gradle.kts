@@ -14,17 +14,24 @@
  * limitations under the__LICENSE] [1].
  */
 
-/**
- * This is a blueprint Gradle settings.gradle.kts file used by Rubens Gomes
- * during the creation of a new Gradle Java developement project.
- *
- * @author [Rubens Gomes](https://rubensgomes.com)
- */
-
-// The project name should match the root folder
+// project name should match the root folder
 rootProject.name = "ms-ex-lib"
-// The project type should match "app" or "lib" depending on project nature
+// project type should match "app" or "lib" depending on project nature
 include("lib")
+
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        mavenCentral()
+    }
+
+    // property found in project root gradle.properties
+    val releasePluginVersion: String by settings
+
+    plugins {
+        id("net.researchgate.release") version releasePluginVersion
+    }
+}
 
 plugins {
     // Apply the foojay-resolver plugin to allow automatic download of JDKs
@@ -33,21 +40,40 @@ plugins {
 
 dependencyResolutionManagement {
     repositories {
+        mavenCentral()
+        google()
+
+        //NOTE: Since we are using GitHub Packages for the Maven Repos, we must
+        // define every package Maven repo separately.
+
+        // property found in project root gradle.properties
+        val msReqrespLibMavenRepoUrl: String by settings
+        val versionCatalogMavenRepoUrl: String by settings
+
+        // URLs of Rubens' GitHub Package Maven repositories.
         maven {
-            // This is the URL of Rubens' public Maven repository.
-            // NOTE: You should replace with your own Maven repository. Rubens may
-            // deactivate this repository at anytime without notice.
-            url = uri("https://repo.repsy.io/mvn/rubensgomes/default/")
+            url = uri(msReqrespLibMavenRepoUrl)
+            credentials {
+                username = System.getenv("MAVEN_REPO_USERNAME")
+                password = System.getenv("MAVEN_REPO_PASSWORD")
+            }
         }
+
+        maven {
+            url = uri(versionCatalogMavenRepoUrl)
+            credentials {
+                username = System.getenv("MAVEN_REPO_USERNAME")
+                password = System.getenv("MAVEN_REPO_PASSWORD")
+            }
+        }
+
     }
 
     versionCatalogs {
         create("libs") {
-            // This is Rubens' Gradle version catalog to manage the versions of
-            // plugins and dependencies used in a Gradle build file.
-            // NOTE: You should replace with our own Gradle Version catalog. Rubens may
-            // deactivate this Gradle version catalog at anytime without notice.
-            from("com.rubensgomes:gradle-catalog:0.0.3")
+            // Rubens' Gradle version catalog to manage the versions of
+            // plugins and dependencies used in the Gradle build file.
+            from("com.rubensgomes:gradle-catalog:0.0.13")
         }
     }
 }
