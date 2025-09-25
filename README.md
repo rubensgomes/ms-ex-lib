@@ -4,55 +4,55 @@ microservices.
 
 ## Display Java Tools Installed
 
-```shell
+```bash
 ./gradlew -q javaToolchains
 ```
 
 ## Clean, Build, Test, Assemble, Publish, Release
 
-```shell
+```bash
 ./gradlew --info clean
 ```
 
-```shell
+```bash
 ./gradlew :lib:spotlessApply
 ```
 
-```shell
+```bash
 ./gradlew --info build
 ```
 
-```shell
+```bash
 ./gradlew --info check
 ```
 
-```shell
+```bash
 ./gradlew --info clean test
 ```
 
-```shell
+```bash
 ./gradlew --info test
 ```
 
-```shell
+```bash
 ./gradlew --info jar
 ```
 
-```shell
+```bash
 ./gradlew --info assemble
 ```
 
-```shell
+```bash
 git commit -m "updates and fixes" -a
 git push
 ```
 
-```shell
+```bash
 # only Rubens can release
 ./gradlew --info release
 ```
 
-```shell
+```bash
 git checkout release
 git pull
 ./gradlew --info publish

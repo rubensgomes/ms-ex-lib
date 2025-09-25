@@ -14,65 +14,61 @@
  * limitations under the__LICENSE] [1].
  */
 
-// project name should match the root folder
+// ------------------- Project setup -------------------
 rootProject.name = "ms-ex-lib"
-// project type should match "app" or "lib" depending on project nature
 include("lib")
 
+// ------------------- Plugin Management -------------------
 pluginManagement {
     repositories {
         gradlePluginPortal()
         mavenCentral()
     }
 
-    // property found in project root gradle.properties
-    val releasePluginVersion: String by settings
+    // Fetch releasePluginVersion directly from settings.extra.properties
+    val releasePluginVersion = settings.extra.properties["releasePluginVersion"] as? String
+        ?: throw GradleException("Property 'releasePluginVersion' not found in gradle.properties")
 
     plugins {
         id("net.researchgate.release") version releasePluginVersion
     }
 }
 
+// ------------------- Global Plugins -------------------
 plugins {
-    // Apply the foojay-resolver plugin to allow automatic download of JDKs
     id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
 }
 
+// ------------------- Dependency Resolution -------------------
+@Suppress("UnstableApiUsage")
 dependencyResolutionManagement {
+
+    // Helper function to configure GitHub Maven repos with credentials
+    fun org.gradle.api.artifacts.dsl.RepositoryHandler.githubRepo(url: String?) {
+        if (!url.isNullOrBlank()) {
+            maven {
+                setUrl(url)
+                credentials {
+                    username = System.getenv("MAVEN_REPO_USERNAME")
+                    password = System.getenv("MAVEN_REPO_PASSWORD")
+                }
+            }
+        }
+    }
+
+    // Fetch GitHub repo URLs directly from settings.extra.properties
+    val msReqrespLibMavenRepoUrl = settings.extra.properties["msReqrespLibMavenRepoUrl"] as? String
+    val versionCatalogMavenRepoUrl = settings.extra.properties["versionCatalogMavenRepoUrl"] as? String
+
     repositories {
         mavenCentral()
         google()
-
-        //NOTE: Since we are using GitHub Packages for the Maven Repos, we must
-        // define every package Maven repo separately.
-
-        // property found in project root gradle.properties
-        val msReqrespLibMavenRepoUrl: String by settings
-        val versionCatalogMavenRepoUrl: String by settings
-
-        // URLs of Rubens' GitHub Package Maven repositories.
-        maven {
-            url = uri(msReqrespLibMavenRepoUrl)
-            credentials {
-                username = System.getenv("MAVEN_REPO_USERNAME")
-                password = System.getenv("MAVEN_REPO_PASSWORD")
-            }
-        }
-
-        maven {
-            url = uri(versionCatalogMavenRepoUrl)
-            credentials {
-                username = System.getenv("MAVEN_REPO_USERNAME")
-                password = System.getenv("MAVEN_REPO_PASSWORD")
-            }
-        }
-
+        githubRepo(msReqrespLibMavenRepoUrl)
+        githubRepo(versionCatalogMavenRepoUrl)
     }
 
     versionCatalogs {
         create("libs") {
-            // Rubens' Gradle version catalog to manage the versions of
-            // plugins and dependencies used in the Gradle build file.
             from("com.rubensgomes:gradle-catalog:0.0.13")
         }
     }
