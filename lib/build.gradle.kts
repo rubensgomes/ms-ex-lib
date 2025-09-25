@@ -106,7 +106,7 @@ publishing {
             }
 
             groupId = project.group.toString()
-            artifactId = project.name
+            artifactId = project.findProperty("artifactId") as String
             version = project.version.toString()
 
             from(components["java"])
@@ -229,5 +229,59 @@ release {
         pushReleaseVersionBranch.set("release")
         pushToRemote.set("origin")
         requireBranch.set("main")
+    }
+}
+
+// ------------------- Debug Info -----------------------
+tasks.register("debugInfo") {
+    group = "help"
+    description = "Prints debug information for troubleshooting build and publishing issues"
+
+    doLast {
+        println("========== DEBUG INFO ==========")
+
+        // Project info
+        println("Project: ${project.name}")
+        println("Group: ${project.group}")
+        println("Version: ${project.version}")
+        println("Project dir: ${project.projectDir}")
+        println("Build dir:  ${layout.buildDirectory.asFile.get()}")
+        println("Gradle version: ${gradle.gradleVersion}")
+        println("Kotlin DSL: true")
+
+        // Java info
+        println("Java version: ${System.getProperty("java.version")}")
+        println("Java vendor: ${System.getProperty("java.vendor")}")
+        println("Java home: ${System.getProperty("java.home")}")
+
+        // OS info
+        println("OS: ${System.getProperty("os.name")} ${System.getProperty("os.version")} (${System.getProperty("os.arch")})")
+        println("User home: ${System.getProperty("user.home")}")
+
+        // Repositories
+        println("Repositories:")
+        project.repositories.forEach { repo ->
+            when (repo) {
+                is MavenArtifactRepository -> println(" - ${repo.name}: ${repo.url}")
+                is IvyArtifactRepository -> println(" - ${repo.name}: ${repo.url}")
+                is FlatDirectoryArtifactRepository -> println(" - ${repo.name}: (flat dir)")
+                else -> println(" - ${repo.name}: (unknown type)")
+            }
+        }
+
+        // Environment variables (print only safe ones)
+        val safeEnv = listOf("MAVEN_REPO_USERNAME", "MAVEN_REPO_PASSWORD")
+        println("Environment variables (safe subset):")
+        safeEnv.forEach { key ->
+            println(" - $key = ${System.getenv(key)}")
+        }
+
+        // Project properties
+        println("Project properties:")
+        project.properties.forEach { (k, v) ->
+            println(" - $k = $v")
+        }
+
+        println("================================")
     }
 }
