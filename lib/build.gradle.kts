@@ -38,7 +38,7 @@ if (isDebugBuild) {
 // ------------------- Dependencies -------------------
 dependencyManagement {
     imports {
-        mavenBom("org.springframework:spring-framework-bom:6.2.9")
+        mavenBom("org.springframework:spring-framework-bom:6.2.11")
     }
 }
 
@@ -51,7 +51,6 @@ dependencies {
     implementation(libs.ms.reqresp.lib)
 
     // Test
-    testImplementation(libs.bundles.logback)
     testImplementation(libs.bundles.junit.jupiter)
     testImplementation(libs.bundles.jakarta.bean.validator)
     testRuntimeOnly(libs.junit.platform.launcher)
