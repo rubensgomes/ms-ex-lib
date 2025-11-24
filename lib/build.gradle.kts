@@ -48,7 +48,7 @@ dependencies {
     implementation(libs.jakarta.annotation.api)
     implementation(libs.jakarta.validation.api)
     implementation(libs.slf4j.api)
-    implementation(libs.ms.reqresp.lib)
+    implementation(libs.ms.base.lib)
 
     // Test
     testImplementation(libs.bundles.junit.jupiter)

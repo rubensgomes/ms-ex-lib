@@ -15,9 +15,9 @@
  */
 package com.rubensgomes.msexlib.system
 
+import com.rubensgomes.msbaselib.Status
+import com.rubensgomes.msbaselib.error.ApplicationError
 import com.rubensgomes.msexlib.ApplicationException
-import com.rubensgomes.msreqresplib.Status
-import com.rubensgomes.msreqresplib.error.Error
 import org.springframework.http.HttpStatus
 
 /**
@@ -58,7 +58,7 @@ import org.springframework.http.HttpStatus
 open class SystemException(
     httpStatus: HttpStatus,
     status: Status,
-    error: Error,
+    error: ApplicationError,
     message: String,
     cause: Throwable?,
 ) : ApplicationException(httpStatus, status, error, message, cause)
