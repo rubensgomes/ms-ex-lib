@@ -24,7 +24,6 @@ plugins {
     alias(libs.plugins.spotless)
     alias(libs.plugins.spring.boot)
     alias(libs.plugins.spring.dependency.management)
-
 }
 
 // ------------------- Debug Mode -------------------
@@ -43,7 +42,6 @@ dependencies {
     // Import the Spring Boot 4 BOM
     implementation(platform(libs.spring.boot.bom))
     testImplementation(platform(libs.spring.boot.bom))
-
 
     // Implementation
     implementation("org.springframework:spring-web")
@@ -86,7 +84,13 @@ java {
     }
 }
 
+// Disable bootJar since this is a library, not a Spring Boot application
+tasks.bootJar {
+    enabled = false
+}
+
 tasks.jar {
+    enabled = true // Re-enable jar task (Spring Boot plugin disables it by default)
     manifest {
         attributes(
             mapOf(
@@ -172,7 +176,7 @@ publishing {
 val licenseHeaderText =
     """
     /*
-     * Copyright 2025 Rubens Gomes
+     * Copyright 2026 Rubens Gomes
      *
      * Licensed under the Apache License, Version 2.0 (the "License");
      * You may not use this file except in compliance with the License.
