@@ -235,8 +235,18 @@ spotless {
     }
 }
 
-// ------------------- Kotlin Compiler -------------------
+// ----------------------------------------------------------------------------
+// --------------- >>> org.jetbrains.kotlin.jvm Plugin <<< --------------------
+// ----------------------------------------------------------------------------
+// https://kotlinlang.org/docs/gradle-configure-project.html#kotlin-and-java-sources
+
 kotlin {
+    /**
+     * Java types used by Kotlin relaxes the null-safety checks. And the Spring Framework provides
+     * null-safety annotations that could be potentially used by Kotlin types. Therefore, we need to
+     * make jsr305 "strict" to ensure null-safety checks is NOT relaxed in Kotlin when Java
+     * annotations, which are Kotlin platform types, are used.
+     */
     compilerOptions { freeCompilerArgs.addAll("-Xjsr305=strict") }
 }
 
