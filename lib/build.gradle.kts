@@ -22,7 +22,9 @@ plugins {
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.release)
     alias(libs.plugins.spotless)
+    alias(libs.plugins.spring.boot)
     alias(libs.plugins.spring.dependency.management)
+
 }
 
 // ------------------- Debug Mode -------------------
@@ -36,13 +38,13 @@ if (isDebugBuild) {
 }
 
 // ------------------- Dependencies -------------------
-dependencyManagement {
-    imports {
-        mavenBom("org.springframework:spring-framework-bom:6.2.11")
-    }
-}
 
 dependencies {
+    // Import the Spring Boot 4 BOM
+    implementation(platform(libs.spring.boot.bom))
+    testImplementation(platform(libs.spring.boot.bom))
+
+
     // Implementation
     implementation("org.springframework:spring-web")
     implementation(libs.jakarta.annotation.api)
