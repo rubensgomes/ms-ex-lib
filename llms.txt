@@ -1,0 +1,62 @@
+# ms-ex-lib
+
+> A Kotlin library providing standardized application exception classes for microservices.
+
+## Overview
+
+ms-ex-lib defines a hierarchy of exception classes for handling different error categories in microservice applications: business logic errors, security/authentication errors, and system/infrastructure errors. All exceptions extend a base `ApplicationException` class that integrates with Spring's `HttpStatus` and provides structured error information.
+
+## Repository Structure
+
+- `/lib/src/main/kotlin/com/rubensgomes/msexlib/` - Main source code
+  - `ApplicationException.kt` - Base exception class
+  - `business/BusinessException.kt` - Business rule violations
+  - `security/SecurityException.kt` - Authentication/authorization errors
+  - `system/SystemException.kt` - Infrastructure/system errors
+- `/lib/src/test/kotlin/` - Unit tests
+- `/lib/build.gradle.kts` - Gradle build configuration (Kotlin DSL)
+- `/settings.gradle.kts` - Project settings and version catalog
+
+## Tech Stack
+
+- Kotlin
+- Java 25 (Amazon Corretto)
+- Gradle 9.1.0 (Kotlin DSL)
+- Spring Framework 6.2.x (HttpStatus)
+- JUnit Jupiter 6.x (testing)
+- Spotless with ktfmt (code formatting)
+
+## Dependencies
+
+This library depends on `ms-base-lib` which provides:
+- `ApplicationError` interface - structured error details
+- `ApplicationErrorCode` interface - error code with description
+- `Status` enum - status indicators (SUCCESS, FAILURE, etc.)
+
+## Exception Constructor Parameters
+
+All exception classes require these parameters:
+- `httpStatus: HttpStatus` - Must be 4xx or 5xx error status
+- `status: Status` - Cannot be Status.SUCCESS
+- `error: ApplicationError` - Structured error information
+- `message: String` - Human-readable message (cannot be blank)
+- `cause: Throwable?` - Optional underlying cause
+
+## Build Commands
+
+```
+./gradlew :lib:spotlessApply  # Format code
+./gradlew --info build        # Build and test
+./gradlew --info test         # Run tests only
+./gradlew --info clean        # Clean build artifacts
+```
+
+## Code Style
+
+- Apache 2.0 license header required on all source files
+- Kotlin formatted with ktfmt via Spotless plugin
+- Run spotlessApply before committing
+
+## Links
+
+- Package Registry: https://maven.pkg.github.com/rubensgomes/jvm-libs
