@@ -1,0 +1,56 @@
+# Copyright 2025 Rubens Gomes
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# You may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+name: Release
+
+on:
+    push:
+        branches:
+            - main
+
+env:
+    GITHUB_USER: "rubensgomes"
+    GITHUB_USER_EMAIL: "rubens.s.gomes@gmail.com"
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Java 25
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'corretto'
+          java-version: '25'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configure Git
+        run: |
+            git config --global user.name "$GITHUB_USER"
+            git config --global user.email "$GITHUB_USER_EMAIL"
+
+      - name: Run Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.RUBENS_PAT_TOKEN }}
+        run: |
+            ./gradlew release --info

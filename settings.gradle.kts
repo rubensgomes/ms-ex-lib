@@ -44,32 +44,30 @@ plugins {
 dependencyResolutionManagement {
 
     // Helper function to configure GitHub Maven repos with credentials
-    fun org.gradle.api.artifacts.dsl.RepositoryHandler.githubRepo(url: String?) {
+    fun RepositoryHandler.githubRepo(url: String?) {
         if (!url.isNullOrBlank()) {
             maven {
                 setUrl(url)
                 credentials {
-                    username = System.getenv("MAVEN_REPO_USERNAME")
-                    password = System.getenv("MAVEN_REPO_PASSWORD")
+                    username = System.getenv("GITHUB_USER")
+                    password = System.getenv("GITHUB_TOKEN")
                 }
             }
         }
     }
 
     // Fetch GitHub repo URLs directly from settings.extra.properties
-    val msReqrespLibMavenRepoUrl = settings.extra.properties["msReqrespLibMavenRepoUrl"] as? String
-    val versionCatalogMavenRepoUrl = settings.extra.properties["versionCatalogMavenRepoUrl"] as? String
+    val jvmLibsRepoPackages = settings.extra.properties["jvmLibsRepoPackages"] as? String
 
     repositories {
         mavenCentral()
         google()
-        githubRepo(msReqrespLibMavenRepoUrl)
-        githubRepo(versionCatalogMavenRepoUrl)
+        githubRepo(jvmLibsRepoPackages)
     }
 
     versionCatalogs {
         create("libs") {
-            from("com.rubensgomes:gradle-catalog:0.0.13")
+            from("com.rubensgomes:gradle-catalog:0.0.27")
         }
     }
 }

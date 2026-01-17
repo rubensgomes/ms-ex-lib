@@ -15,8 +15,8 @@
  */
 package com.rubensgomes.msexlib
 
-import com.rubensgomes.msreqresplib.Status
-import com.rubensgomes.msreqresplib.error.Error
+import com.rubensgomes.msbaselib.Status
+import com.rubensgomes.msbaselib.error.ApplicationError
 import org.springframework.http.HttpStatus
 
 /**
@@ -43,13 +43,13 @@ import org.springframework.http.HttpStatus
  * @throws IllegalArgumentException if status is Status.SUCCESS
  * @see Exception
  * @see Status
- * @see Error
+ * @see ApplicationError
  * @author Rubens Gomes
  */
 open class ApplicationException(
     val httpStatus: HttpStatus,
     val status: Status,
-    val error: Error,
+    val error: ApplicationError,
     override val message: String,
     cause: Throwable?,
 ) : Exception(message, cause) {
