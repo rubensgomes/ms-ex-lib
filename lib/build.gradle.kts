@@ -264,7 +264,6 @@ tasks.afterReleaseBuild {
     dependsOn("publish")
 }
 
-
 // ------------------- Debug Info -----------------------
 tasks.register("debugInfo") {
     group = "help"
