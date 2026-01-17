@@ -49,27 +49,25 @@ dependencyResolutionManagement {
             maven {
                 setUrl(url)
                 credentials {
-                    username = System.getenv("MAVEN_REPO_USERNAME")
-                    password = System.getenv("MAVEN_REPO_PASSWORD")
+                    username = System.getenv("GITHUB_USER")
+                    password = System.getenv("GITHUB_TOKEN")
                 }
             }
         }
     }
 
     // Fetch GitHub repo URLs directly from settings.extra.properties
-    val msBaseLibMavenRepoUrl = settings.extra.properties["msBaseLibMavenRepoUrl"] as? String
-    val versionCatalogMavenRepoUrl = settings.extra.properties["versionCatalogMavenRepoUrl"] as? String
+    val jvmLibsRepoPackages = settings.extra.properties["jvmLibsRepoPackages"] as? String
 
     repositories {
         mavenCentral()
         google()
-        githubRepo(msBaseLibMavenRepoUrl)
-        githubRepo(versionCatalogMavenRepoUrl)
+        githubRepo(jvmLibsRepoPackages)
     }
 
     versionCatalogs {
         create("libs") {
-            from("com.rubensgomes:gradle-catalog:0.0.15")
+            from("com.rubensgomes:gradle-catalog:0.0.27")
         }
     }
 }

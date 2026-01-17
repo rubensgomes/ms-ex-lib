@@ -56,7 +56,12 @@ dependencies {
     testRuntimeOnly(libs.junit.platform.launcher)
 }
 
-// ------------------- Idea Plugin -------------------
+// ----------------------------------------------------------------------------
+// --------------- >>> Gradle IDEA Plugin <<< ---------------------------------
+// NOTE: This section is dedicated to configuring the Idea plugin.
+// ----------------------------------------------------------------------------
+// https://docs.gradle.org/current/userguide/idea_plugin.html
+
 idea {
     module {
         isDownloadJavadoc = true
@@ -64,12 +69,17 @@ idea {
     }
 }
 
-// ------------------- Java Plugin -------------------
+// ----------------------------------------------------------------------------
+// --------------- >>> Gradle Java Plugin <<< ---------------------------------
+// NOTE: This section is dedicated to configuring the Java plugin.
+// ----------------------------------------------------------------------------
+// https://docs.gradle.org/current/userguide/java_plugin.html
+
 java {
     withSourcesJar()
     withJavadocJar()
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(21))
+        languageVersion.set(JavaLanguageVersion.of(25))
         vendor.set(JvmVendorSpec.AMAZON)
     }
 }
@@ -96,7 +106,11 @@ tasks.javadoc {
     }
 }
 
-// ------------------- Maven Publish -------------------
+// ----------------------------------------------------------------------------
+// --------------- >>> Gradle Maven Publish Plugin <<< ------------------------
+// ----------------------------------------------------------------------------
+// https://docs.gradle.org/current/userguide/publishing_maven.html
+
 publishing {
     publications {
         create<MavenPublication>("mavenJava") {
@@ -144,16 +158,15 @@ publishing {
     repositories {
         maven {
             name = "GitHubPackages"
-            url = uri(project.properties["libMavenRepoUrl"] as String)
+            url = uri(project.properties["jvmLibsRepoPackages"] as String)
             credentials {
-                username = System.getenv("MAVEN_REPO_USERNAME")
-                password = System.getenv("MAVEN_REPO_PASSWORD")
+                username = System.getenv("GITHUB_USER")
+                password = System.getenv("GITHUB_TOKEN")
             }
         }
     }
 }
 
-// ------------------- Spotless -------------------
 val licenseHeaderText =
     """
     /*
@@ -172,6 +185,12 @@ val licenseHeaderText =
      * limitations under the License.
      */
     """.trimIndent()
+
+// ----------------------------------------------------------------------------
+// --------------- >>> com.diffplug.spotless Plugin <<< -----------------------
+// NOTE: This section is dedicated to configuring the spotless plugin.
+// ----------------------------------------------------------------------------
+// https://github.com/diffplug/spotless
 
 spotless {
     // Java formatting
@@ -217,13 +236,22 @@ kotlin {
 
 tasks.compileKotlin { dependsOn("spotlessApply") }
 
-// ------------------- JVM Test Suite -------------------
+// ----------------------------------------------------------------------------
+// --------------- >>> Gradle JVM Test Suite Plugin <<< -----------------------
+// NOTE: This section is dedicated to configuring the JVM Test Suite plugin.
+// ----------------------------------------------------------------------------
+// https://docs.gradle.org/current/userguide/jvm_test_suite_plugin.html
+
 tasks.test {
     useJUnitPlatform()
     jvmArgs("-XX:+EnableDynamicAgentLoading")
 }
 
-// ------------------- Release Plugin -------------------
+// ----------------------------------------------------------------------------
+// --------------- >>> net.researchgate.release Plugin <<< --------------------
+// ----------------------------------------------------------------------------
+// https://github.com/researchgate/gradle-release
+
 release {
     with(git) {
         pushReleaseVersionBranch.set("release")
@@ -270,7 +298,7 @@ tasks.register("debugInfo") {
         }
 
         // Environment variables (print only safe ones)
-        val safeEnv = listOf("MAVEN_REPO_USERNAME", "MAVEN_REPO_PASSWORD")
+        val safeEnv = listOf("GITHUB_USER", "GITHUB_TOKEN")
         println("Environment variables (safe subset):")
         safeEnv.forEach { key ->
             println(" - $key = ${System.getenv(key)}")
