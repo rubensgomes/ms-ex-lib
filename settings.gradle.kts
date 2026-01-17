@@ -67,7 +67,7 @@ dependencyResolutionManagement {
 
     versionCatalogs {
         create("libs") {
-            from("com.rubensgomes:gradle-catalog:0.0.27")
+            from("com.rubensgomes:gradle-catalog:0.0.28")
         }
     }
 }
